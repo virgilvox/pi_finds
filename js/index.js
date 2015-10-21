@@ -4,9 +4,9 @@ var ivApp = angular.module("MyApp");
 
 
  $scope.someBody = "";
- $scope.someTitle = "Ivoirian Puzzles";
+ $scope.someTitle = "Pi Finds Food";
  $scope.archiveUrl = "#archive";
- $scope.puzzleUrl = "#puzzle";
+ $scope.recipeUrl = "#recipe";
 
   // ALL THE IMPORTANT VARIABLES
 
@@ -14,7 +14,7 @@ var ivApp = angular.module("MyApp");
   var less_popular = '#212121';
   //var post_count = puzzles.response.total_posts;
   var post_count;
-  var square_size = 1;
+  var square_size = 2;
   var posts = [];
   //$scope.loadGrid = false;
 
@@ -35,8 +35,8 @@ var ivApp = angular.module("MyApp");
     var retrieve_more = function (offset) {
 
     var key = "api_key=AtAx2nkLkrkUJUE6bLu2upJ1HkJBsQ7sYZEyr9Acc9voec6nQd";
-    var api = "https://api.tumblr.com/v2/blog/ivoirians.tumblr.com/";
-    var url = api + "posts/text?callback=JSON_CALLBACK&filter=html&limit=20&offset=" + offset + "&" + key;
+    var api = "https://api.tumblr.com/v2/blog/pifindsfood.tumblr.com/";
+    var url = api + "posts/photo?callback=JSON_CALLBACK&filter=html&limit=20&offset=" + offset + "&" + key;
 
     var req = {
    "method": 'JSONP',
@@ -47,14 +47,15 @@ var ivApp = angular.module("MyApp");
       then(function(response) {
         var resp = response.data.response;
         post_count = resp.total_posts;
-        //console.log(resp);
+        console.log(resp);
         angular.forEach(resp.posts, function(data) {
           var value = {
             "color": pickColor(data.note_count),
-            "colspan": square_size + 1,
+            "colspan": square_size ,
             "rowspan": square_size,
             "title": data.title,
-            "body": data.body,
+            "photo": data.photos[0].alt_sizes[3].url,
+            "body": data.caption,
             "tags": data.tags,
             "post_url": data.post_url ,
             "slug": data.slug,
@@ -68,7 +69,7 @@ var ivApp = angular.module("MyApp");
             retrieve_more(offset + 20);
           }
         }else{
-          //  console.log(posts);
+            console.log(posts);
             $scope.loadGrid = true;
             callback(posts);
         }
